@@ -2,7 +2,7 @@
 
 namespace CodeProject\Http\Controllers;
 
-use CodeProject\Client;
+use CodeProject\Models\Client;
 use Illuminate\Http\Request;
 
 use CodeProject\Http\Requests;
@@ -12,7 +12,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        return \CodeProject\Client::all();
+        return \CodeProject\Models\Client::all();
     }
 
     public function store(Request $request)
