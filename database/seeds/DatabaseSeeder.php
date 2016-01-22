@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
         /*Desativa chave etrangeira*/
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        \CodeProject\Entities\User::truncate();
-        \CodeProject\Entities\Client::truncate();
         \CodeProject\Entities\Project::truncate();
+        \CodeProject\Entities\Client::truncate();
+        \CodeProject\Entities\User::truncate();
 
-        $this->call(UserTableSeeder::class);
-        $this->call(ClientTableSeeder::class);
         $this->call(ProjectTableSeeder::class);
+        $this->call(ClientTableSeeder::class);
+        $this->call(UserTableSeeder::class);
 
         /*ativa chave estrangeira*/
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
