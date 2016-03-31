@@ -12,6 +12,8 @@ namespace CodeProject\Services;
 use CodeProject\Entities\Project;
 use CodeProject\Repositories\ClientRepository;
 use CodeProject\Validators\ClientValidator;
+use Illuminate\Contracts\Queue\EntityNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -68,11 +70,20 @@ class ClientService
         try {
             $this->validator->with($data)->passesOrFail();
             return $this->repository->update($data, $id);
-
         } catch (ValidatorException $e) {
             return [
                 'error' => true,
                 'message' => $e->getMessageBag()
+            ];
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'No data found'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to update the data. Try again later.'
             ];
         }
     }
@@ -84,7 +95,12 @@ class ClientService
         } catch (ModelNotFoundException $e) {
             return [
                 'error' => true,
-                'message' => 'not founded'
+                'message' => 'No data found.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to update the data. Try again later.'
             ];
         }
 
@@ -97,7 +113,12 @@ class ClientService
         } catch (ModelNotFoundException $e) {
             return [
                 'error' => true,
-                'message' => 'no data'
+                'message' => 'No data.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to update the data. Try again later.'
             ];
         }
     }
@@ -105,14 +126,24 @@ class ClientService
     public function delete($id)
     {
         try {
-            $this->repository->delete($id);
+            $this->repository->delete($id)->with('projects')->find($id);
             return [
                 'success' => true
             ];
-        } catch (NotFoundHttpException $e) {
+        } catch (QueryException $e) {
             return [
                 'error' => true,
-                'message' => 'not founded'
+                'message' => 'Client can not be deleted because there are one or more projects linked to it.'
+            ];
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'No data found.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to delete the data. Try again later.'
             ];
         }
     }

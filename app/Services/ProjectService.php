@@ -13,6 +13,7 @@ use CodeProject\Repositories\ClientRepository;
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Validators\ClientValidator;
 use CodeProject\Validators\ProjectValidator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -75,6 +76,16 @@ class ProjectService
                 'error' => true,
                 'message' => $e->getMessageBag()
             ];
+        } catch (ModelNotFoundException $e) {
+            return [
+                'error' => true,
+                'message' => 'No data found'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to update the data. Try again later.'
+            ];
         }
     }
 
@@ -85,7 +96,12 @@ class ProjectService
         } catch (ModelNotFoundException $e) {
             return [
                 'error' => true,
-                'message' => 'not founded'
+                'message' => 'No data found.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to update the data. Try again later.'
             ];
         }
     }
@@ -97,7 +113,12 @@ class ProjectService
         } catch (ModelNotFoundException $e) {
             return [
                 'error' => true,
-                'message' => 'no data'
+                'message' => 'No data found.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to update the data. Try again later.'
             ];
         }
     }
@@ -109,10 +130,15 @@ class ProjectService
             return [
                 'success' => true
             ];
-        } catch (NotFoundHttpException $e) {
+        } catch (ModelNotFoundException $e) {
             return [
                 'error' => true,
-                'message' => 'not founded'
+                'message' => 'No data found.'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'error' => true,
+                'message' => 'An error occurred when trying to delete the data. Try again later.'
             ];
         }
     }
