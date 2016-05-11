@@ -9,24 +9,24 @@ use CodeProject\Services\ProjectService;
 use Illuminate\Http\Request;
 
 /**
- * Class ClientController
+ * Class ProjectController
  * @package CodeProject\Http\Controllers
  */
 class ProjectController extends Controller
 {
 
     /**
-     * @var ClientRepository
+     * @var ProjectRepository
      */
     private $repository;
     /**
-     * @var ClientService
+     * @var ProjectService
      */
     private $service;
 
     /**
-     * @param ClientRepository $repository
-     * @param ClientService $service
+     * @param ProjectRepository $repository
+     * @param ProjectService $service
      */
     function __construct(ProjectRepository $repository, ProjectService $service)
     {
@@ -69,6 +69,7 @@ class ProjectController extends Controller
         return $this->service->delete($id);
     }
 
+
     /**
      * @param Request $request
      * @param $id
@@ -77,5 +78,25 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         return $this->service->update($request->all(),$id);
+    }
+
+    /**
+     * @param $id
+     * @param null $memberId
+     */
+    public function members($id){
+        return $this->service->members($id);
+    }
+
+    public function member($id,$memberId){
+        return $this->service->member($id,$memberId);
+    }
+
+    public function addMember($id,$memberId){
+        return $this->service->addMember($id,$memberId);
+    }
+
+    public function removeMember($id,$memberId){
+        return $this->service->removeMember($id,$memberId);
     }
 }
